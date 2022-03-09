@@ -11,7 +11,6 @@ const Container = styled.div`
 
 function App() {
 	const [taskData, setTaskData] = useState(initialData);
-	const [homeIndex, setHomeIndex] = useState(null);
 
 	const onDragEnd = (result) => {
 		const { destination, source, draggableId, type } = result;
@@ -108,15 +107,12 @@ function App() {
 								(taskId) => taskData.tasks[taskId]
 							);
 
-							const isDropDisabled = index < homeIndex;
-
 							return (
 								<Column
 									key={column.id}
 									index={index}
 									column={column}
 									tasks={tasks}
-									isDropDisabled={isDropDisabled}
 								/>
 							);
 						})}

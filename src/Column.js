@@ -33,7 +33,6 @@ const Column = (props) => {
 					<Title {...provided.dragHandleProps}>{props.column.title}</Title>
 					<Droppable
 						droppableId={props.column.id}
-						isDropDisabled={props.isDropDisabled}
 						type='task'
 						//type={props.column.id === 'column-3' ? 'done' : 'active'}
 					>
