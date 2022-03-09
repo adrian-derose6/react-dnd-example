@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-import { Droppable } from 'react-beautiful-dnd';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 import { Task } from './Task.js';
 
 const Container = styled.div`
+	background-color: white;
 	margin: 8px;
 	border: 1px solid lightgrey;
 	border-radius: 2px;
@@ -16,7 +17,8 @@ const Title = styled.h3`
 `;
 
 const TaskList = styled.div`
-	background-color: ${(props) => (props.isDraggingOver ? 'skyblue' : 'white')};
+	background-color: ${(props) =>
+		props.isDraggingOver ? 'skyblue' : 'inherit'};
 	transition: background-color 0.2s ease;
 	padding: 8px;
 	flex-grow: 1;
@@ -25,27 +27,32 @@ const TaskList = styled.div`
 
 const Column = (props) => {
 	return (
-		<Container>
-			<Title>{props.column.title}</Title>
-			<Droppable
-				droppableId={props.column.id}
-				isDropDisabled={props.isDropDisabled}
-				//type={props.column.id === 'column-3' ? 'done' : 'active'}
-			>
-				{(provided, snapshot) => (
-					<TaskList
-						ref={provided.innerRef}
-						{...provided.droppableProps}
-						isDraggingOver={snapshot.isDraggingOver}
+		<Draggable draggableId={props.column.id} index={props.index}>
+			{(provided) => (
+				<Container {...provided.draggableProps} ref={provided.innerRef}>
+					<Title {...provided.dragHandleProps}>{props.column.title}</Title>
+					<Droppable
+						droppableId={props.column.id}
+						isDropDisabled={props.isDropDisabled}
+						type='task'
+						//type={props.column.id === 'column-3' ? 'done' : 'active'}
 					>
-						{props.tasks.map((task, index) => (
-							<Task key={task.id} task={task} index={index} />
-						))}
-						{provided.placeholder}
-					</TaskList>
-				)}
-			</Droppable>
-		</Container>
+						{(provided, snapshot) => (
+							<TaskList
+								ref={provided.innerRef}
+								{...provided.droppableProps}
+								isDraggingOver={snapshot.isDraggingOver}
+							>
+								{props.tasks.map((task, index) => (
+									<Task key={task.id} task={task} index={index} />
+								))}
+								{provided.placeholder}
+							</TaskList>
+						)}
+					</Droppable>
+				</Container>
+			)}
+		</Draggable>
 	);
 };
 
